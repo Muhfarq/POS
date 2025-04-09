@@ -39,7 +39,7 @@ public function list(Request $request){
 
     return DataTables::of($users)
         ->addIndexColumn() // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
-        ->addColumn('aksi', function ($user) { // menambahkan kolom aksi
+        ->addColumn('action', function ($user) { // menambahkan kolom aksi
 
             $btn = '<button onclick="modalAction(\''.url('/user/' . $user->user_id . '/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
             $btn .= '<button onclick="modalAction(\''.url('/user/' . $user->user_id . '/edit_ajax').'\')" class="btn btn-warning btn-sm">Edit</button> ';
@@ -47,7 +47,7 @@ public function list(Request $request){
 
             return $btn;
         })
-        ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html
+        ->rawColumns(['action']) // memberitahu bahwa kolom aksi adalah html
         ->make(true);
 }
 

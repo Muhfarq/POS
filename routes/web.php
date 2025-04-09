@@ -1,121 +1,93 @@
-@empty($barang)
-<div id="modal-master" class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Kesalahan!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+<?php
 
-            <div class="modal-body">
-                <div class="alert alert-danger">
-                    <h5><i class="icon fas fa-ban"></i> Kesalahan !!!</h5>
-                    Data yang anda cari tidak ditemukan
-                </div>
-                <a href="{{ route('barang.index') }}" class="btn btn-warning">Kembali</a>
-            </div>
-        </div>
-    </div>
-@else
-    <form id="form-delete" action="{{ route('barang.delete-ajax', ['id' => $barang->barang_id]) }}" method="post">
-        @csrf
-        @method('DELETE')
+use Illuminate\Support\Facades\Route;
 
-        <div id="modal-master" class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Hapus Data Barang</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+use App\Http\Controllers\StokController;
+use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\PenjualanDetailController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\LevelController;
 
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                        Apakah Anda ingin menghapus data seperti di bawah ini ?
-                    </div>
+Route::get('/', [WelcomeController::class, 'index']);
 
-                    <table class="table table-sm table-bordered table-striped">
-                        <tr>
-                            <th class="text-right col-3">Kategori</th>
-                            <td class="col-9">{{ $barang->kategori->kategori_nama }}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right col-3">Nama</th>
-                            <td class="col-9">{{ $barang->barang_nama }}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right col-3">Harga Beli</th>
-                            <td class="col-9">{{ $barang->harga_beli }}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right col-3">Harga Jual</th>
-                            <td class="col-9">{{ $barang->harga_jual }}</td>
-                        </tr>
-                    </table>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                    <button type="submit" class="btn btn-primary">Ya, Hapus</button>
-                </div>
-            </div>
-        </div>
-    </form>
+//user
+Route::group(['prefix'=>'user'], function(){
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('/list', [UserController::class, 'list']);
+    Route::get('/create', [UserController::class, 'create']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/create_ajax', [UserController::class, 'create_ajax']);
+    Route::post('/ajax', [UserController::class, 'store_ajax']);
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::get('/{id}/edit', [UserController::class, 'edit']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']);
+    Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);
+    Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
+    Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
+    Route::delete('/{id}', [UserController::class, 'destroy']); 
+});
 
-    <script>
-        $(document).ready(function() {
-            $('#form-delete').validate({
-                rules: {},
-                submitHandler: function(form) {
-                    $.ajax({
-                        url: form.action,
-                        type: form.method,
-                        data: $(form).serialize(),
-                        success: function(res, textStatus, xhr) {
-                            if (xhr.status == 200) {
-                                $('#myModal').modal('hide');
+// Level
+Route::prefix('level')
+->controller(LevelController::class)
+->group(function () {
+Route::get('/', 'index')->name('level.index');
+Route::post('/list','list')->name('level.list');
+Route::get('/create','create')->name('level.create');
+Route::get('/create-ajax', 'createAjax')->name('level.create-ajax');
+Route::post('/','store')->name('level.store');
+Route::post('/store-ajax', 'storeAjax')->name('level.store-ajax');
+Route::get('/{id}', 'show')->name('level.show');
+Route::get('/{id}/edit', 'edit')->name('level.edit');
+Route::get('/{id}/edit-ajax', 'editAjax')->name('level.edit-ajax');
+Route::put('/{id}', 'update')->name('level.update');
+Route::put('/{id}/update-ajax', 'updateAjax')->name('level.update-ajax');
+Route::delete('/{id}', 'destroy')->name('level.destroy');
+Route::get('/{id}/delete-ajax', 'confirmDeleteAjax')->name('level.confirm-delete-ajax');
+Route::delete('/{id}/delete-ajax', 'deleteAjax')->name('level.delete-ajax');
+});
 
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil',
-                                    text: res.message
-                                });
+// Kategori
+Route::prefix( 'kategori')
+->controller(KategoriController::class)
+->group(function () {
+Route::get('/', 'index')->name('kategori.index');
+Route::post('/list',  'list')->name('kategori.list');
+Route::get('/create', 'create')->name('kategori.create');
+Route::get('/create-ajax', 'createAjax')->name('kategori.create-ajax');
+Route::post('/', 'store')->name('kategori.store');
+Route::post('/store-ajax', 'storeAjax')->name('kategori.store-ajax');
+Route::get('/{id}', 'show')->name('kategori.show');
+Route::get('/{id}/edit', 'edit')->name('kategori.edit');
+Route::get('/{id}/edit-ajax', 'editAjax')->name('kategori.edit-ajax');
+Route::put('/{id}', 'update')->name('kategori.update');
+Route::put('/{id}/update-ajax', 'updateAjax')->name('kategori.update-ajax');
+Route::delete('/{id}', 'destroy')->name('kategori.destroy');
+Route::get('/{id}/delete-ajax', 'confirmDeleteAjax')->name('kategori.confirm-delete-ajax');
+Route::delete('/{id}/delete-ajax', 'deleteAjax')->name('kategori.delete-ajax');
+});
 
-                                dataBarang.ajax.reload();
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Terjadi Kesalahan',
-                                text: xhr.responseJSON ? xhr.responseJSON.message : 'Terjadi kesalahan!'
-                            });
-
-                            if (xhr.responseJSON && xhr.responseJSON.msgField) {
-                                $('.error-text').text('');
-                                $.each(xhr.responseJSON.msgField, function(prefix, val) {
-                                    $('#error-' + prefix).text(val[0]);
-                                });
-                            }
-                        }
-                    });
-                    return false;
-                },
-                errorElement: 'span',
-                errorPlacement: (error, element) => {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: (element, errorClass, validClass) => {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: (element, errorClass, validClass) => {
-                    $(element).removeClass('is-invalid');
-                }
-            })
-        });
-    </script>
-@endempty
+// Barang
+Route::prefix('barang')
+->controller(BarangController::class)
+->group(function () {
+Route::get('/', 'index')->name('barang.index');
+Route::post('/list',  'list')->name('barang.list');
+Route::get('/create', 'create')->name('barang.create');
+Route::get('/create-ajax', 'createAjax')->name('barang.create-ajax');
+Route::post('/', 'store')->name('barang.store');
+Route::post('/store-ajax', 'storeAjax')->name('barang.store-ajax');
+Route::get('/{id}', 'show')->name('barang.show');
+Route::get('/{id}/edit', 'edit')->name('barang.edit');
+Route::get('/{id}/edit-ajax', 'editAjax')->name('barang.edit-ajax');
+Route::put('/{id}', 'update')->name('barang.update');
+Route::put('/{id}/update-ajax', 'updateAjax')->name('barang.update-ajax');
+Route::delete('/{id}', 'destroy')->name('barang.destroy');
+Route::get('/{id}/delete-ajax', 'confirmDeleteAjax')->name('barang.confirm-delete-ajax');
+Route::delete('/{id}/delete-ajax', 'deleteAjax')->name('barang.delete-ajax');
+});
