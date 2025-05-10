@@ -45,7 +45,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('login');
@@ -56,42 +56,41 @@ class AuthController extends Controller
         $levels = LevelModel::all();
         return view('auth.signup', compact('levels'));
     }
-    
+
 
     public function postSignup(Request $req)
-{
-    if (!$req->ajax() && !$req->wantsJson()) {
-        return redirect()->back();
-    }
+    {
+        if (!$req->ajax() && !$req->wantsJson()) {
+            return redirect()->back();
+        }
 
-    $validator = Validator::make($req->all(), [
-        'username' => 'required|string|min:5|max:20|unique:m_user,username',
-        'nama' => 'required|string|min:5|max:100',
-        'password' => 'required|string|min:6|confirmed',
-        'level_id' => 'required|exists:m_level,level_id' // Validate that the level exists
-    ]);
-    
-    
+        $validator = Validator::make($req->all(), [
+            'username' => 'required|string|min:5|max:20|unique:m_user,username',
+            'nama' => 'required|string|min:5|max:100',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
 
-    if ($validator->fails()) {
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user = UserModel::create([
+            'username' => $req->username,
+            'nama' => $req->nama,
+            'level_id' => 3,
+            'password' => Hash::make($req->password)
+        ]);
+
+        Auth::login($user);
+
         return response()->json([
-            'message' => 'Validasi Gagal',
-            'msgField' => $validator->errors()
-        ], Response::HTTP_BAD_REQUEST);
+            'message' => 'Data pengguna berhasil dibuat',
+            'redirect' => url('/')
+        ], Response::HTTP_OK);
     }
-
-    $user = UserModel::create([
-        'username' => $req->username,
-        'nama' => $req->nama,
-        'level_id' => $req->level_id,
-        'password' => Hash::make($req->password)
-    ]);
-
-    Auth::login($user);
-    
-    return response()->json([
-        'message' => 'Data pengguna berhasil dibuat',
-        'redirect' => url('/')
-    ], Response::HTTP_OK);
-}
 }

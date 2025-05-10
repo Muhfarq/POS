@@ -33,24 +33,24 @@ class StokController extends Controller
 
     public function list(Request $request)
     {
-        $stok = StokModel::with(['barang', 'user'])->select('stok_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah');
+        $stoks = StokModel::with(['barang', 'user'])->select('stok_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah');
 
         if ($request->barang_id) {
-            $stok->where('barang_id', $request->barang_id);
+            $stoks->where('barang_id', $request->barang_id);
         }
 
-        if ($request->user_id) {
-            $stok->where('user_id', $request->user_id);
-        }
+        // if ($request->user_id) {
+        //     $stok->where('user_id', $request->user_id);
+        // }
 
-        return DataTables::of($stok)
+        return DataTables::of($stoks)
             ->addIndexColumn()
-            ->addColumn('barang_nama', function ($stok) {
-                return $stok->barang->barang_nama ?? '-';
-            })
-            ->addColumn('username', function ($stok) {
-                return $stok->user->username ?? '-';
-            })
+            // ->addColumn('barang_nama', function ($stok) {
+            //     return $stok->barang->barang_nama ?? '-';
+            // })
+            // ->addColumn('username', function ($stok) {
+            //     return $stok->user->username ?? '-';
+            // })
             ->addColumn('aksi', function ($stok) {
                 $btn  = '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';

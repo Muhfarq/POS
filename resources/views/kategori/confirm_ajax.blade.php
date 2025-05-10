@@ -3,9 +3,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger">
@@ -24,22 +23,21 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Hapus Data Kategori</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-warning">
                         <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                        Apakah Anda yakin ingin menghapus data kategori berikut?
+                        Apakah Anda ingin menghapus data seperti di bawah ini?
                     </div>
                     <table class="table table-sm table-bordered table-striped">
                         <tr>
-                            <th class="text-right col-3">ID Kategori:</th>
-                            <td class="col-9">{{ $kategori->kategori_id }}</td>
+                            <th class="text-right col-3">Kode Kategori :</th>
+                            <td class="col-9">{{ $kategori->kategori_kode }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Nama Kategori:</th>
+                            <th class="text-right col-3">Nama Kategori :</th>
                             <td class="col-9">{{ $kategori->kategori_nama }}</td>
                         </tr>
                     </table>
@@ -96,6 +94,6 @@
                     $(element).removeClass('is-invalid');
                 }
             });
-        });
+        }); 
     </script>
 @endempty

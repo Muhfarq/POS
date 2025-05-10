@@ -1,22 +1,50 @@
-<form action="{{ url('/kategori/ajax') }}" method="POST" id="form-tambah">
+<form action="{{ url('/detail_penjualan/ajax') }}" method="POST" id="form-tambah">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Kategori</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Detail Penjualan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>Kode Kategori</label>
-                    <input value="" type="text" name="kategori_kode" id="kategori_kode" class="form-control" required>
-                    <small id="error-kategori_kode" class="error-text form-text text-danger"></small>
+                {{-- Penjualan --}}
+                <div class="form-group row">
+                    <label class="col-2 col-form-label">Kode Penjualan</label>
+                    <div class="col-10">
+                        <select name="penjualan_id" id="penjualan_id" class="form-control" required>
+                            <option value="">- Pilih Kode Penjualan -</option>
+                            @foreach ($penjualan as $p)
+                                <option value="{{ $p->penjualan_id }}">{{ $p->penjualan_kode }} - {{$p->penjualan_tanggal}}</option>
+                            @endforeach
+                        </select>
+                        @error('penjualan_id') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+
+                {{-- Barang --}}
+                <div class="form-group row">
+                    <label class="col-2 col-form-label">Barang</label>
+                    <div class="col-10">
+                        <select name="barang_id" class="form-control" required>
+                            <option value="">- Pilih Barang -</option>
+                            @foreach($barang as $b)
+                                <option value="{{ $b->barang_id }}" }}>{{ $b->barang_kode }} - {{ $b->barang_nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('barang_id') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Nama Kategori</label>
-                    <input value="" type="text" name="kategori_nama" id="kategori_nama" class="form-control" required>
-                    <small id="error-kategori_nama" class="error-text form-text text-danger"></small>
+                    <label>Harga</label>
+                    <input type="number" name="harga" id="harga" class="form-control" required>
+                    <small id="error-harga" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah</label>
+                    <input type="number" name="jumlah" id="jumlah" class="form-control" required>
+                    <small id="error-jumlah" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -30,8 +58,10 @@
     $(document).ready(function () {
         $("#form-tambah").validate({
             rules: {
-                kategori_kode: { required: true },
-                kategori_nama: { required: true, minlength: 3, maxlength: 100 }
+                penjualan_id: { required: true },
+                barang_id: { required: true },
+                harga: { required: true, min: 1 },
+                jumlah: { required: true, min: 1 }
             },
             submitHandler: function (form) {
                 $.ajax({
@@ -46,7 +76,7 @@
                                 title: 'Berhasil',
                                 text: response.message
                             });
-                            dataKategori.ajax.reload();
+                            dataDetailPenjualan.ajax.reload();
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function (prefix, val) {
@@ -74,5 +104,5 @@
                 $(element).removeClass('is-invalid');
             }
         });
-    }); 
+    });
 </script>

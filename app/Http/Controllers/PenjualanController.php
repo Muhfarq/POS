@@ -30,7 +30,7 @@ class PenjualanController extends Controller
 
     public function list(Request $request)
     {
-        $sale = PenjualanModel::with(['user'])->select('penjualan_id', 'user_id', 'pembeli', 'penjualan_kode', 'penjualan_tanggal');
+        $sale = PenjualanModel::with(['user'])->select('penjualan_id', 'user_id', 'pembeli', 'penjual_kode', 'penjual_tanggal');
 
         if ($request->user_id) {
             $sale->where('user_id', $request->user_id);
@@ -41,13 +41,13 @@ class PenjualanController extends Controller
             ->addColumn('username', function ($penjualan) {
                 return $penjualan->user->username ?? '-';
             })
-            ->addColumn('aksi', function ($penjualan) {
+            ->addColumn('action', function ($penjualan) {
                 $btn  = '<button onclick="modalAction(\'' . url('/penjualan/' . $penjualan->penjualan_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/penjualan/' . $penjualan->penjualan_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/penjualan/' . $penjualan->penjualan_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -73,7 +73,7 @@ class PenjualanController extends Controller
         $request->validate([
             'user_id' => 'required|integer',
             'pembeli' => 'required|string',
-            'penjualan_kode' => 'required|string',
+            'penjual_kode' => 'required|string',
             'stok_tanggal' => 'required|date'
         ]);
 
@@ -124,15 +124,15 @@ class PenjualanController extends Controller
         $request->validate([
             'user_id' => 'required',
             'pembeli' => 'required|string',
-            'penjualan_kode' => 'required|string',
-            'penjualan_tanggal' => 'required|date',
+            'penjual_kode' => 'required|string',
+            'penjual_tanggal' => 'required|date',
         ]);
 
         PenjualanModel::find($id)->update([
             'user_id' => $request->user_id,
             'pembeli' => $request->pembeli,
-            'penjualan_kode' => $request->penjualan_kode,
-            'penjualan_tanggal' => $request->penjualan_tanggal,
+            'penjual_kode' => $request->penjual_kode,
+            'penjual_tanggal' => $request->penjual_tanggal,
         ]);
 
         return redirect('/penjualan')->with('success', 'Data penjualan berhasil diubah');
@@ -165,8 +165,8 @@ class PenjualanController extends Controller
             $rules = [
                 'user_id' => 'required',
                 'pembeli' => 'required|string',
-                'penjualan_kode' => 'required|string',
-                'penjualan_tanggal' => 'required|date',
+                'penjual_kode' => 'required|string',
+                'penjual_tanggal' => 'required|date',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -208,8 +208,8 @@ class PenjualanController extends Controller
             $rules = [
                 'user_id' => 'required',
                 'pembeli' => 'required|string',
-                'penjualan_kode' => 'required|string',
-                'penjualan_tanggal' => 'required|date',
+                'penjual_kode' => 'required|string',
+                'penjual_tanggal' => 'required|date',
             ];
 
             $validator = Validator::make($request->all(), $rules);

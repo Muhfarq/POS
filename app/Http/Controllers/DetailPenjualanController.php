@@ -31,34 +31,45 @@ class DetailPenjualanController extends Controller
     }
 
     public function list(Request $request)
-    {
-        $detail = PenjualanModel::with(['user'])->select('penjualan_id', 'user_id', 'pembeli', 'penjualan_kode', 'penjualan_tanggal');
+{
+    // Ambil data dari DetailPenjualanModel dengan relasi barang dan penjualan
+    $detail = DetailPenjualanModel::with(['barang', 'penjualan']);
 
-        if ($request->penjualan_id) {
-            $detail->where('penjualan_id', $request->penjualan_id);
-        }
-
-        if ($request->barang_id) {
-            $detail->where('barang_id', $request->barang_id);
-        }
-
-        return DataTables::of($detail)
-            ->addIndexColumn()
-            ->addColumn('penjualan_kode', function ($detail_penjualan) {
-                return $detail_penjualan->penjualan->penjualan_kode ?? '-';
-            })
-            ->addColumn('barang_kode', function ($detail_penjualan) {
-                return $detail_penjualan->barang->barang_kode ?? '-';
-            })
-            ->addColumn('aksi', function ($detail_penjualan) {
-                $btn  = '<button onclick="modalAction(\'' . url('/penjualan/' . $detail_penjualan->penjualan_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/penjualan/' . $detail_penjualan->penjualan_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/penjualan/' . $detail_penjualan->penjualan_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
-                return $btn;
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
+    if ($request->penjualan_id) {
+        $detail->where('penjualan_id', $request->penjualan_id);
     }
+
+    if ($request->barang_id) {
+        $detail->where('barang_id', $request->barang_id);
+    }
+
+    return DataTables::of($detail)
+        ->addIndexColumn()
+        ->addColumn('penjualan_kode', function ($row) {
+            return $row->penjualan->penjualan_kode ?? '-';
+        })
+        ->addColumn('barang_nama', function ($row) {
+            return $row->barang->barang_nama ?? '-';
+        })
+        ->addColumn('action', function ($row) {
+            $btn  = '<button onclick="modalAction(\'' . url('/detail_penjualan/' . $row->id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+            $btn .= '<button onclick="modalAction(\'' . url('/detail_penjualan/' . $row->id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
+            $btn .= '<button onclick="modalAction(\'' . url('/detail_penjualan/' . $row->id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button>';
+            return $btn;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+}
+
+public function barang()
+{
+    return $this->belongsTo(BarangModel::class, 'barang_id');
+}
+
+public function penjualan()
+{
+    return $this->belongsTo(PenjualanModel::class, 'penjualan_id');
+}
 
     public function create()
     {

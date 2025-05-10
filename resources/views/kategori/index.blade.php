@@ -23,7 +23,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nama Kategori</th>
-                        <th>Keterangan</th>
+                        <th>ID Kategori</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -65,7 +65,7 @@
                         searchable: true
                     },
                     {
-                        data: "kategori_keterangan",
+                        data: "kategori_kode",
                         orderable: true,
                         searchable: true
                     },
