@@ -11,6 +11,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
+
 Route::pattern('id', '[0-9]+');
 
 Route::controller(AuthController::class)->group(function () {
@@ -52,17 +53,17 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', 'index')->name('level.index');
             Route::post('/list', 'list')->name('level.list');
             Route::get('/create', 'create')->name('level.create');
-            Route::get('/create-ajax', 'createAjax')->name('level.create-ajax');
+            Route::get('/create-ajax', 'createAjax')->name('level.create_ajax');
             Route::post('/', 'store')->name('level.store');
-            Route::post('/store-ajax', 'storeAjax')->name('level.store-ajax');
+            Route::post('/store-ajax', 'storeAjax')->name('level.store_ajax');
             Route::get('/{id}', 'show')->name('level.show');
             Route::get('/{id}/edit', 'edit')->name('level.edit');
-            Route::get('/{id}/edit-ajax', 'editAjax')->name('level.edit-ajax');
+            Route::get('/{id}/edit-ajax', 'editAjax')->name('level.edit_ajax');
             Route::put('/{id}', 'update')->name('level.update');
-            Route::put('/{id}/update-ajax', 'updateAjax')->name('level.update-ajax');
+            Route::put('/{id}/update-ajax', 'updateAjax')->name('level.update_ajax');
             Route::delete('/{id}', 'destroy')->name('level.destroy');
-            Route::get('/{id}/delete-ajax', 'confirmDeleteAjax')->name('level.confirm-delete-ajax');
-            Route::delete('/{id}/delete-ajax', 'deleteAjax')->name('level.delete-ajax');
+            Route::get('/{id}/delete-ajax', 'confirmDeleteAjax')->name('level.confirm_ajax');
+            Route::delete('/{id}/delete-ajax', 'deleteAjax')->name('level.delete_ajax');
             Route::get('/{id}/show_ajax', 'show_ajax')->name('level.show_ajax');
         });
 
@@ -74,17 +75,17 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', 'index')->name('kategori.index');
             Route::post('/list',  'list')->name('kategori.list');
             Route::get('/create', 'create')->name('kategori.create');
-            Route::get('/create-ajax', 'createAjax')->name('kategori.create-ajax');
+            Route::get('/create-ajax', 'createAjax')->name('kategori.create_ajax');
             Route::post('/', 'store')->name('kategori.store');
-            Route::post('/store-ajax', 'storeAjax')->name('kategori.store-ajax');
+            Route::post('/store-ajax', 'storeAjax')->name('kategori.store_ajax');
             Route::get('/{id}', 'show')->name('kategori.show');
             Route::get('/{id}/edit', 'edit')->name('kategori.edit');
-            Route::get('/{id}/edit-ajax', 'editAjax')->name('kategori.edit-ajax');
+            Route::get('/{id}/edit-ajax', 'editAjax')->name('kategori.edit_ajax');
             Route::put('/{id}', 'update')->name('kategori.update');
-            Route::put('/{id}/update-ajax', 'updateAjax')->name('kategori.update-ajax');
+            Route::put('/{id}/update-ajax', 'updateAjax')->name('kategori.update_ajax');
             Route::delete('/{id}', 'destroy')->name('kategori.destroy');
-            Route::get('/{id}/delete-ajax', 'confirmDeleteAjax')->name('kategori.confirm-delete-ajax');
-            Route::delete('/{id}/delete-ajax', 'deleteAjax')->name('kategori.delete-ajax');
+            Route::get('/{id}/delete-ajax', 'confirmDeleteAjax')->name('kategori.confirm_ajax');
+            Route::delete('/{id}/delete-ajax', 'deleteAjax')->name('kategori.delete_ajax');
             Route::get('/{id}/show_ajax', 'show_ajax')->name('kategori.show_ajax');
         });
 
@@ -108,7 +109,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/delete_ajax', 'confirm_ajax')->name('barang.confirm_ajax');
             Route::delete('/{id}/delete_ajax', 'delete_ajax')->name('barang.delete_ajax');
             Route::get('/{id}/show_ajax', 'show_ajax')->name('barang.show_ajax');
-
             Route::get('/import', 'import')->name('barang.import');
             Route::post('/import_ajax', 'import_ajax')->name('barang.import_ajax');
             Route::get('/export_excel', 'export_excel')->name('barang.export_excel');
