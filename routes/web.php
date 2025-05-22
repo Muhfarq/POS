@@ -175,4 +175,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [DetailPenjualanController::class, 'delete_ajax']);
         Route::delete('/{id}', [PenjualanController::class, 'destroy']);
     });
+
+       Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile.index');
+    Route::post('/profile/update-picture', [UserController::class, 'updateProfilePicture']);
+    });
 });

@@ -8,6 +8,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
@@ -16,12 +17,14 @@
                     </a>
                     <small id="error-kategori_id" class="error-text form-text text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label>Pilih File</label>
                     <input type="file" name="file_barang" id="file_barang" class="form-control" required>
                     <small id="error-file_barang" class="error-text form-text text-danger"></small>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                 <button type="submit" class="btn btn-primary">Upload</button>
@@ -40,7 +43,7 @@ $(document).ready(function () {
             }
         },
         submitHandler: function (form) {
-            var formData = new FormData(form); // Meng-handle file
+            var formData = new FormData(form);
             $.ajax({
                 url: form.action,
                 type: form.method,
@@ -55,7 +58,7 @@ $(document).ready(function () {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        tableBarang.ajax.reload(); // reload datatable
+                        tableBarang.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function (prefix, val) {
