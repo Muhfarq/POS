@@ -1,24 +1,31 @@
 <div class="sidebar">
-    <!-- Sidebar Search Form -->
-    <div class="form-inline mt-2">
-        <div class="input-group" data-widget="sidebar-search">
-            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-                <button class="btn btn-sidebar">
-                    <i class="fas fa-search fa-fw"></i>
-                </button>
-            </div>
+<!-- Sidebar user (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img src="{{ auth()->check() ? auth()->user()->getProfilePictureUrl() : asset('adminlte/dist/img/user2-160x160.jpg') }}"
+                class="img-circle elevation-2" alt="" style="width: 32px; height: 32px; object-fit: cover;">
         </div>
+        <div class="info">
+            <a href="{{ url('/profile') }}" class="d-block">{{ auth()->check() ? auth()->user()->nama : 'Guest' }}</a>
+        </div>
+
     </div>
 
+    <!-- Sidebar Menu -->
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-            <!-- Dashboard -->
             <li class="nav-item">
                 <a href="{{ url('/') }}" class="nav-link {{ $activeMenu == 'dashboard' ? 'active' : '' }}">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ url('/profile') }}" class="nav-link {{ $activeMenu == 'profile' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-user-circle"></i>
+                    <p>User Profile</p>
                 </a>
             </li>
 
@@ -31,7 +38,7 @@
             </li>
             <li class="nav-item">
                 <a href="{{ url('/user') }}" class="nav-link {{ $activeMenu == 'user' ? 'active' : '' }}">
-                    <i class="nav-icon far fa-user"></i>
+                    <i class="nav-icon fas fa-users"></i>
                     <p>Data User</p>
                 </a>
             </li>
@@ -64,8 +71,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ url('/detail_penjualan') }}"
-                    class="nav-link {{ $activeMenu == 'detail_penjualan' ? 'active' : '' }}">
+                <a href="{{ url('/detail_penjualan') }}" class="nav-link {{ $activeMenu == 'detail_penjualan' ? 'active' : '' }}">
                     <i class="nav-icon fas fa-shipping-fast"></i>
                     <p>Detail Penjualan</p>
                 </a>
@@ -78,6 +84,7 @@
                     <p class="text-danger">Logout</p>
                 </a>
             </li>
+
         </ul>
     </nav>
 </div>
