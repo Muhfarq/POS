@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserModel extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
-
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -31,40 +28,35 @@ class UserModel extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    
-    protected $table = 'm_user'; // mendefinisikan nama tabel yang digunakan oleh model ini
-    protected $primaryKey = 'user_id'; // mendefinisikan primary key dari tabel yang digunakan
-    protected $fillable = ['level_id', 'username', 'nama', 'password', 'profile_picture'];
 
-    protected $hidden = ['password']; // jangan ditampilkan saat select
+    protected $table = 'm_user';
+    protected $primaryKey = 'user_id';
 
-    protected $casts = ['password' => 'hashed']; //casting password agar otomatis di hash
+    protected $fillable = [
+        'username',
+        'nama',
+        'password',
+        'level_id',
+        'image' // additional
+    ];
 
-    public function level(): BelongsTo
+    /**
+     * Get the level associated with the user.
+     */
+    public function level()
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
 
-    public function getRoleName(): String
+    /**
+     * Get the image attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function image(): Attribute
     {
-        return $this->level->level_nama;
+        return Attribute::make(
+            get: fn ($image) => url('/storage/posts/' . $image),
+        );
     }
-
-    public function hasRole($role): bool
-    {
-        return $this->level->level_kode == $role;
-    }
-
-    public function getRole()
-    {
-        return $this->level->level_kode;
-    }
-
-public function getProfilePictureUrl()
-    {
-        return $this->image
-            ? asset($this->image)
-            : asset('adminlte/dist/img/avatar.png');
-    }
-
 }

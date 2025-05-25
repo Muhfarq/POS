@@ -56,3 +56,4 @@ Route::put('/barang/{barang}', [BarangController::class, 'update']);
 Route::delete('/barang/{barang}', [BarangController::class, 'destroy']);
 
 Route::post('/barang/image', [BarangController::class, 'add_image'])->name('image');
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
