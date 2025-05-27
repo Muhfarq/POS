@@ -11,28 +11,30 @@ class RegisterController extends Controller
 {
     public function __invoke(Request $request)
     {
-    // set validation
+        //set validation
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
             'username' => 'required',
+            'nama' => 'required',
             'password' => 'required|min:5|confirmed',
             'level_id' => 'required',
+            'image' => 'required'
         ]);
 
-        // if validations fails
+        //if validations fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // create user
+        //create user
         $user = UserModel::create([
             'username' => $request->username,
             'nama' => $request->nama,
             'password' => bcrypt($request->password),
             'level_id' => $request->level_id,
+            'image' => $request->image
         ]);
 
-        // return response JSON user is created
+        //return response JSON user is created
         if ($user) {
             return response()->json([
                 'success' => true,
@@ -40,7 +42,7 @@ class RegisterController extends Controller
             ], 201);
         }
 
-        // return JSON process insert failed
+        //return JSON process insert failed
         return response()->json([
             'success' => false,
         ], 409);
